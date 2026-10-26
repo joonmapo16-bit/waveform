@@ -1,0 +1,56 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+}
+
+group = 'io.github.joonmapo16'
+version = '1.6.0'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'junit:junit:4.13.2'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+test {
+    useJUnit()
+    testLogging {
+        events 'passed', 'skipped', 'failed'
+    }
+}
+
+tasks.named('sourcesJar') {
+    archiveBaseName = 'waveform-core'
+}
+
+jar {
+    archiveBaseName = 'waveform-core'
+    manifest {
+        attributes(
+                'Implementation-Title': 'waveform-core',
+                'Implementation-Version': project.version,
+                'Automatic-Module-Name': 'com.local.musicspeed.waveform'
+        )
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+            artifactId = 'waveform-core'
+        }
+    }
+}
